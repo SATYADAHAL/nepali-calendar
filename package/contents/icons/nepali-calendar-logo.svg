@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="logo.svg"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.48378485"
+     inkscape:cx="864.02044"
+     inkscape:cy="543.63008"
+     inkscape:window-width="1920"
+     inkscape:window-height="972"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <filter
+       id="springShadowRight"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
+      <feDropShadow
+         dx="2"
+         dy="0"
+         stdDeviation="1.2"
+         flood-color="#000"
+         flood-opacity="0.3" />
+    </filter>
+    <filter
+       id="calendarShadow"
+       x="-0.068333333"
+       y="-0.068333333"
+       width="1.1616667"
+       height="1.1616667"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         in="SourceAlpha"
+         stdDeviation="3"
+         result="blur"
+         id="feGaussianBlur1" />
+      <feOffset
+         in="blur"
+         dx="3"
+         dy="3"
+         result="offsetBlur"
+         id="feOffset1" />
+      <feFlood
+         flood-color="#000"
+         flood-opacity="0.6"
+         result="flood"
+         id="feFlood1" />
+      <feComposite
+         in="flood"
+         in2="offsetBlur"
+         operator="in"
+         result="shadow"
+         id="feComposite1" />
+      <feMerge
+         id="feMerge2">
+        <feMergeNode
+           in="shadow"
+           id="feMergeNode1" />
+        <feMergeNode
+           in="SourceGraphic"
+           id="feMergeNode2" />
+      </feMerge>
+    </filter>
+    <clipPath
+       id="calendarClip">
+      <rect
+         x="50"
+         y="50"
+         width="120"
+         height="120"
+         rx="15"
+         ry="15"
+         id="rect2" />
+    </clipPath>
+    <clipPath
+       id="clipTopPart">
+      <rect
+         x="0"
+         y="40"
+         width="220"
+         height="10"
+         id="rect3" />
+    </clipPath>
+    <filter
+       id="springShadowRight-3"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
+      <feDropShadow
+         dx="2"
+         dy="0"
+         stdDeviation="1.2"
+         flood-color="#000"
+         flood-opacity="0.3" />
+    </filter>
+    <filter
+       id="calendarShadow-6"
+       x="-0.068333333"
+       y="-0.068333333"
+       width="1.1616667"
+       height="1.1616667"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         in="SourceAlpha"
+         stdDeviation="3"
+         result="blur"
+         id="feGaussianBlur1-7" />
+      <feOffset
+         in="blur"
+         dx="3"
+         dy="3"
+         result="offsetBlur"
+         id="feOffset1-5" />
+      <feFlood
+         flood-color="#000"
+         flood-opacity="0.6"
+         result="flood"
+         id="feFlood1-3" />
+      <feComposite
+         in="flood"
+         in2="offsetBlur"
+         operator="in"
+         result="shadow"
+         id="feComposite1-5" />
+      <feMerge
+         id="feMerge2-6">
+        <feMergeNode
+           in="shadow"
+           id="feMergeNode1-2" />
+        <feMergeNode
+           in="SourceGraphic"
+           id="feMergeNode2-9" />
+      </feMerge>
+    </filter>
+    <clipPath
+       id="calendarClip-1">
+      <rect
+         x="50"
+         y="50"
+         width="120"
+         height="120"
+         rx="15"
+         ry="15"
+         id="rect2-2" />
+    </clipPath>
+    <clipPath
+       id="clipTopPart-7">
+      <rect
+         x="0"
+         y="40"
+         width="220"
+         height="10"
+         id="rect3-0" />
+    </clipPath>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <!-- Background circle -->
+    <!-- Calendar outer border with rounded corners and shadow -->
+    <!-- Group header and body clipped inside the rounded border -->
+    <!-- Springs main -->
+    <!-- Spring shadows clipped and filtered -->
+    <!-- Background circle -->
+    <ellipse
+       cx="104.28032"
+       cy="140.86562"
+       fill="#ffffff"
+       stroke="#333333"
+       stroke-width="3.517"
+       id="circle3"
+       rx="103.08915"
+       ry="105.5542"
+       style="fill:#98e998;fill-opacity:1;stroke-width:1.15912;stroke-dasharray:none" />
+    <!-- Calendar outer border with rounded corners and shadow -->
+    <path
+       style="fill:#000000;fill-opacity:0.187759;fill-rule:evenodd;stroke:#101e1a;stroke-width:0;stroke-linecap:square;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+       d="m 45.172685,199.29347 39.621504,45.25603 8.170993,1.3714 6.0126,0.60951 h 10.791848 l 14.18357,-1.67615 9.40434,-2.43804 15.44252,-6.13642 10.61209,-6.20613 7.70846,-5.3332 5.70428,-5.02844 5.55008,-5.18083 5.0916,-6.05012 6.32282,-8.40427 5.4507,-9.26622 5.2327,-11.63669 4.14253,-12.71413 1.74423,-9.26625 1.09015,-10.99018 0.19146,-9.37194 -46.22491,-56.392134 z"
+       id="path1"
+       sodipodi:nodetypes="cccccccccccccccccccccc" />
+    <rect
+       x="50"
+       y="50"
+       width="120"
+       height="120"
+       fill="none"
+       stroke="#333333"
+       stroke-width="2"
+       rx="15"
+       ry="15"
+       filter="url(#calendarShadow)"
+       id="rect4"
+       style="filter:url(#calendarShadow-6)"
+       transform="matrix(1.0308915,0,0,1.0555419,-9.1177735,24.756013)" />
+    <!-- Group header and body clipped inside the rounded border -->
+    <g
+       clip-path="url(#calendarClip-1)"
+       id="g6"
+       transform="matrix(1.0308915,0,0,1.0555419,-9.1177735,24.756013)">
+      <!-- Header -->
+      <rect
+         x="50"
+         y="50"
+         width="120"
+         height="30"
+         fill="#90caf9"
+         id="rect5" />
+      <!-- Header text "पात्रो" -->
+      <text
+         x="103.54468"
+         y="78.199776"
+         font-family="Mangal, Arial, sans-serif"
+         font-size="18.8263px"
+         fill="#0d47a1"
+         font-weight="bold"
+         text-anchor="middle"
+         dominant-baseline="middle"
+         id="text5"
+         transform="scale(1.0623434,0.94131522)"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.941315">पात्रो</text>
+      <!-- Body -->
+      <rect
+         x="50"
+         y="80"
+         width="120"
+         height="90"
+         fill="#e3f2fd"
+         id="rect6" />
+      <!-- Date text -->
+      <text
+         x="128.85756"
+         y="104.93738"
+         font-family="Mangal, Arial, sans-serif"
+         font-size="19.3124px"
+         fill="#1565c0"
+         text-anchor="middle"
+         dominant-baseline="middle"
+         id="text6"
+         style="fill:#000000;fill-opacity:1;stroke-width:1.20703"
+         transform="scale(0.86993217,1.1495149)">१ बैशाख २०९०</text>
+    </g>
+    <!-- Springs main — drawn last so they appear on top -->
+    <g
+       fill="#333333"
+       rx="2"
+       id="g10"
+       transform="matrix(1.0308915,0,0,1.0555419,-9.1177735,24.756013)">
+      <rect
+         x="65"
+         y="40"
+         width="10"
+         height="20"
+         ry="2"
+         id="rect7" />
+      <rect
+         x="90"
+         y="40"
+         width="10"
+         height="20"
+         ry="2"
+         id="rect8" />
+      <rect
+         x="115"
+         y="40"
+         width="10"
+         height="20"
+         ry="2"
+         id="rect9" />
+      <rect
+         x="140"
+         y="40"
+         width="10"
+         height="20"
+         ry="2"
+         id="rect10" />
+    </g>
+    <rect
+       style="fill:#000000;fill-opacity:0.452992;fill-rule:evenodd;stroke:#101e1a;stroke-width:0;stroke-linecap:square;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+       id="rect1-3"
+       width="5.6687369"
+       height="8.6197519"
+       x="145.10033"
+       y="68.66893"
+       rx="0.71855646"
+       ry="0.56788433" />
+    <!-- Spring shadows clipped and filtered — also drawn last -->
+    <rect
+       style="fill:#000000;fill-opacity:0.45;fill-rule:evenodd;stroke:#101e1a;stroke-width:0;stroke-linecap:square;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+       id="rect1"
+       width="5.6687369"
+       height="8.6197519"
+       x="67.911545"
+       y="68.841026"
+       rx="0.71855646"
+       ry="0.56788433" />
+    <rect
+       style="fill:#000000;fill-opacity:0.45;fill-rule:evenodd;stroke:#101e1a;stroke-width:0;stroke-linecap:square;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+       id="rect1-6"
+       width="5.6687369"
+       height="8.6197519"
+       x="93.626556"
+       y="68.260307"
+       rx="0.71855646"
+       ry="0.56788433" />
+    <rect
+       style="fill:#000000;fill-opacity:0.45;fill-rule:evenodd;stroke:#101e1a;stroke-width:0;stroke-linecap:square;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+       id="rect1-7"
+       width="5.6687369"
+       height="8.6197519"
+       x="119.80904"
+       y="68.240852"
+       rx="0.71855646"
+       ry="0.56788433" />
+  </g>
+</svg>

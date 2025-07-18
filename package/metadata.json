@@ -1,0 +1,52 @@
+{
+    "KPlugin": {
+        "Id": "nepali-calendar",
+        "Name": "Nepali Calendar",
+        "Description": "A calendar widget for the Nepali Bikram Sambat calendar with panel integration.",
+        "Icon": "office-calendar-symbolic",
+        "Version": "1.0.0",
+        "License": "GPL-3.0-or-later",
+        "Website": "https://github.com/satyadahal/nepali-calendar",
+        "Category": "Date and Time",
+        "EnabledByDefault": true,
+        "Dependencies": [],
+        "Authors": [
+            {
+                "Name": "Satya Prakash Dahal",
+                "Email": "dahal.satya321@gmail.com"
+            }
+        ],
+        "Credits": [
+            {
+                "Name": "Sushil Shrestha",
+                "Homepage": "https://github.com/SushilShrestha/pyBSDate",
+                "Role": "Dataset source (Bikram Sambat to AD mapping)",
+                "License": "MIT"
+            }
+        ],
+        "Keywords": [
+            "calendar",
+            "nepali calendar",
+            "bikram sambat",
+            "bs to ad",
+            "ad to bs",
+            "date converter",
+            "bs calendar",
+            "nepal"
+        ]
+    },
+    "KPackageStructure": "Plasma/Applet",
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-MainScript": "ui/main.qml",
+    "X-Plasma-RemoteLocation": "",
+    "X-KDE-PluginInfo-Name": "nepali-calendar",
+    "Config": {
+        "Pages": [
+            {
+                "name": "General",
+                "icon": "settings-configure",
+                "source": "config/config.qml"
+            }
+        ]
+    }
+}

@@ -1,0 +1,24 @@
+# Qt Creator files
+*.pro.user
+*.qbs.user
+*.creator.user
+
+# Backup files
+*~
+*.swp
+*.bak
+*.tmp
+
+# Logs
+*.log
+
+# Generated plasmoid package files
+*.plasmoid
+
+# IDE files
+.vscode/
+.idea/
+
+# Others
+*.qmlc
+*.qmltypes

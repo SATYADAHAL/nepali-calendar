@@ -47,11 +47,7 @@ Available on KDE Store:
 ---
 
 ## Author
-
-- Satya Prakash Dahal  
-  dahal.satya321@gmail.com  
-  [GitHub](https://github.com/satyadahal/nepali-calendar)
-
+- Satya Prakash Dahal
 
 ## Credits
 

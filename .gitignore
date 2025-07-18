@@ -12,7 +12,7 @@
 # Logs
 *.log
 
-# Generated plasmoid package files
+# Plasmoid file
 *.plasmoid
 
 # IDE files

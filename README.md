@@ -11,12 +11,8 @@ Available on KDE Store:
 
 <table>
   <tr>
-    <td><img src="assets/ScreenShot-light1.png" alt="Light Theme 1" width="300"/></td>
-    <td><img src="assets/ScreenShot-light2.png" alt="Light Theme 2" width="300"/></td>
-  </tr>
-  <tr>
-    <td><img src="assets/ScreenShot-dark3.png" alt="Dark Theme 1" width="300"/></td>
-    <td><img src="assets/ScreenShot-dark4.png.png" alt="Dark Theme 2" width="300"/></td>
+    <td><img src="assets/breeze_light.png" alt="Light Theme 1" width="300"/></td>
+    <td><img src="assets/breeze_dark.png" alt="Dark Theme 2" width="300"/></td>
   </tr>
 </table>
 

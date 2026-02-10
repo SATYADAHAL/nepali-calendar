@@ -48,6 +48,35 @@ export function adToBs(adDate) {
   return 0;
 }
 
+export function bsToAd(bsYear, bsMonth, bsDay) {
+  if (!DATE_MAP[bsYear]) return null;
+  
+  const startDateStr = DATE_MAP[bsYear]['1stbaisakh'];
+  const daysOnMonth = DATE_MAP[bsYear].daysonmonth;
+  const adStartDate = parseDate(startDateStr);
+  
+  // Calculate days to add from Baisakh 1
+  let daysToAdd = 0;
+  
+  // Add days for complete months before current month
+  for (let m = 1; m < bsMonth; m++) {
+    daysToAdd += daysOnMonth[m - 1];
+  }
+  
+  // Add days in current month
+  daysToAdd += bsDay - 1;
+  
+  // Create new date by adding days to start date
+  const resultDate = new Date(adStartDate);
+  resultDate.setDate(resultDate.getDate() + daysToAdd);
+  
+  return {
+    adYear: resultDate.getFullYear(),
+    adMonth: resultDate.getMonth() + 1,  // 1-12
+    adDay: resultDate.getDate()
+  };
+}
+
 export function getEnglishMonthRangeFromBs(bsYear, bsMonth) {
   const daysOnMonth = DATE_MAP[bsYear].daysonmonth;
   const startDateStr = DATE_MAP[bsYear]['1stbaisakh'];

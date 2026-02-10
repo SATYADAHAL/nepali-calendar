@@ -4,7 +4,7 @@
         "Name": "Nepali Calendar",
         "Description": "A calendar widget for the Nepali Bikram Sambat calendar with panel integration.",
         "Icon": "office-calendar-symbolic",
-        "Version": "1.1.0",
+        "Version": "1.2.0",
         "License": "GPL-3.0-or-later",
         "Website": "https://github.com/satyadahal/nepali-calendar",
         "Category": "Date and Time",

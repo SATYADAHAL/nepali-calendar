@@ -1,7 +1,7 @@
 # Nepali Calendar (Plasmoid)
 
 A calendar widget for the Nepali Bikram Sambat (BS) calendar with panel integration for KDE Plasma.  
-It enables users to browse Nepali dates in a familiar calendar format.
+It enables users to browse Nepali dates in a familiar calendar format with holiday support.
 
 Available on KDE Store:  
 [https://store.kde.org/p/2303034/](https://store.kde.org/p/2303034/)
@@ -18,36 +18,36 @@ Available on KDE Store:
 
 
 ## Features
-
-- Displays Nepali Bikram Sambat calendar.
-- View current month or browse other months with previous/next buttons.
-- Integration with KDE Plasma panel.
-- Lightweight no any external api calls for date information.
+- Month/year navigation and picker
+- Holiday support (partial)
+- Lightweight - no external API calls
 
 ---
 
-## Limitations (Current)
+## Holiday Architecture
 
-- No direct BS ⇄ AD conversion (e.g., you cannot input a BS date and instantly convert to AD).
-- Navigation through months is manual (left/right click).
+
+1. **Constant Holidays** - Fixed day holidays (e.g., Poush 15, Magh 1,December 25 etc.)
+2. **Year-specific Holidays** - Varies every year (Dashain,Loshars etc.)
+
+> [!WARNING]  
+> **Current Limitation:** The holiday list is currently incomplete. While fixed-date holidays work perfectly, many Nepali festivals (such as Dashain, Tihar, or Lhosar) rely on the **Lunar Tithi system**. These are not yet automatically calculated and must be manually added to the year-specific data.
 
 ---
 
 ## Future Goals
 
-1. Add direct BS ⇄ AD conversion support.
-2. Show Tithis and events in calendar view.
-4. Add configuration options like date format,font wieght etc.
-5. Add custom icons to for some elements.
+1. **Tithi Integration:** Add support for calculating holidays based on the Lunar Calendar (Tithi).
+2. **Date Converter:** Add a user-facing BS ⇄ AD date conversion tool.
+3. **Extended Data:** Add more year-specific holiday datasets and festival descriptions.
 
 ---
 
 ## Author
-- Satya Prakash Dahal
+- **Satya Prakash Dahal**
 
-## Credits
+### Credits
 
 - Sushil Shrestha – [pyBSDate](https://github.com/SushilShrestha/pyBSDate)  
   (Dataset source for BS ⇄ AD mapping)  
   Licensed under MIT
-

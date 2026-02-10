@@ -6,12 +6,20 @@
     <kcfgfile name=""/>
 
     <group name="General">
-        <entry name="showCalendarIcon" type="Bool">
+        <entry name="dateFormat" type="Int">
+            <default>1</default>
+        </entry>
+
+        <entry name="showAdDateOnGrid" type="Bool">
             <default>true</default>
         </entry>
 
-        <entry name="dateFormat" type="Int">
-            <default>1</default>
+        <entry name="showHolidays" type="Bool">
+            <default>true</default>
+        </entry>
+
+        <entry name="holidayTitleLanguage" type="String">
+            <default>nepali</default>
         </entry>
     </group>
 </kcfg>

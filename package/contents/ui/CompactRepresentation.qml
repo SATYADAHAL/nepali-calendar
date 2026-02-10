@@ -19,11 +19,14 @@ MouseArea {
     Layout.minimumWidth: Kirigami.Units.gridUnit * 3
 
     // Detect vertical panel layout
-    readonly property bool isVerticalPanel: plasmoid.location === PlasmaCore.Types.TopEdge ||
-        plasmoid.location === PlasmaCore.Types.BottomEdge
+    readonly property bool isVerticalPanel:
+        plasmoid.location === PlasmaCore.Types.TopEdge ||
+            plasmoid.location === PlasmaCore.Types.BottomEdge
 
     property var todayBsInfo: ({
-        bsDay: 1, bsMonth: 1, bsYear: 2081
+        bsDay: 1,
+        bsMonth: 1,
+        bsYear: 2081
     })
 
     Text {
@@ -39,21 +42,18 @@ MouseArea {
 
         // Dynamic font sizing that considers both height and width constraints
         font.pixelSize: {
-            // Base size based on height
-            const baseSize = Math.max(12, parent.height * 0.95);
+            const baseSize = Math.max(12, parent.height * 0.95)
 
-            // Calculate required width for text
-            const metrics = textMetrics;
-            metrics.font.pixelSize = baseSize;
-            const requiredWidth = metrics.advanceWidth;
+            const metrics = textMetrics
+            metrics.font.pixelSize = baseSize
+            const requiredWidth = metrics.advanceWidth
 
-            // Reduce size if needed for vertical panels or narrow spaces
             if (!compactRoot.isVerticalPanel) {
-                const maxWidth = parent.width - Kirigami.Units.smallSpacing * 4;
-                const scaleFactor = Math.min(1.0, maxWidth / requiredWidth);
-                return Math.max(12, baseSize * scaleFactor);
+                const maxWidth = parent.width - Kirigami.Units.smallSpacing * 4
+                const scaleFactor = Math.min(1.0, maxWidth / requiredWidth)
+                return Math.max(12, baseSize * scaleFactor)
             }
-            return baseSize;
+            return baseSize
         }
 
         horizontalAlignment: Text.AlignHCenter
@@ -61,42 +61,24 @@ MouseArea {
         elide: Text.ElideRight
 
         text: {
-            if (!todayBsInfo) return "";
+            if (!todayBsInfo) return ""
+
             const day = CalendarUtils.toNepaliNumber(todayBsInfo.bsDay)
             const month = CalendarUtils.getNepaliMonthName(todayBsInfo.bsMonth)
             const year = CalendarUtils.toNepaliNumber(todayBsInfo.bsYear)
             const dateFormat = plasmoid.configuration.dateFormat
 
             switch (dateFormat) {
-            case 0: return `$ {
-                    day
-                } $ {
-                    month
-                }`;
-            case 1: return `$ {
-                        month
-                    } $ {
-                        day
-                    }`;
-            case 2: return `$ {
-                            month
-                        } $ {
-                            day
-                        }, $ {
-                            year
-                        }`;
-            case 3: return `$ {
-                                day
-                            } $ {
-                                month
-                            }, $ {
-                                year
-                            }`;
-            default: return `$ {
-                                    day
-                                } $ {
-                                    month
-                                }`;
+            case 0:
+                return `${day} ${month}`
+            case 1:
+                return `${month} ${day}`
+            case 2:
+                return `${month} ${day}, ${year}`
+            case 3:
+                return `${day} ${month}, ${year}`
+            default:
+                return `${day} ${month}`
             }
         }
     }

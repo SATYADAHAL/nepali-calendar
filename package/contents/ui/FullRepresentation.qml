@@ -32,7 +32,7 @@ Item {
     property bool showAdDateOnGrid: true
     property bool showHolidays: true
     property string holidayTitleLanguage: "nepali"
-    property string compactDateViewLanguage: "nepali"
+    property string compactplusGridDateViewLanguage: "nepali"
     property var getHolidaysForDate: function(year, month, day) {
         return [];
     }
@@ -381,10 +381,10 @@ Item {
             Layout.fillWidth: true
             visible: !fullRep.showingYearMonthPicker
             Repeater {
-                model: fullRep.compactDateViewLanguage === "nepali" ? fullRep.nepaliDays : fullRep.nepaliEnglishDays
+                model: fullRep.compactplusGridDateViewLanguage === "nepali" ? fullRep.nepaliDays : fullRep.nepaliEnglishDays
                 Label {
                     text: modelData
-                    font.family: fullRep.compactDateViewLanguage === "nepali" ? "Noto Sans Devanagari" : "Noto Sans"
+                    font.family: fullRep.compactplusGridDateViewLanguage === "nepali" ? "Noto Sans Devanagari" : "Noto Sans"
                     font.weight: 600
                     font.pointSize: 12
                     horizontalAlignment: Text.AlignHCenter
@@ -459,7 +459,7 @@ Item {
                             width: parent.width
 
                             Label {
-                                text: CalendarUtils.toNepaliNumber(nepaliDay, fullRep.compactDateViewLanguage)
+                                text: CalendarUtils.toNepaliNumber(nepaliDay, fullRep.compactplusGridDateViewLanguage)
                                 font.family: "Noto Sans Devanagari"
                                 font.weight: Font.Medium
                                 font.pointSize: fullRep.showAdDateOnGrid ? 15 : 17
@@ -602,7 +602,7 @@ Item {
 
                                 enabled: isValid
 
-                                text: isValid ? CalendarUtils.toNepaliNumber(yearValue, fullRep.compactDateViewLanguage) : ""
+                                text: isValid ? CalendarUtils.toNepaliNumber(yearValue, fullRep.compactplusGridDateViewLanguage) : ""
                                 font.family: "Noto Sans Devanagari"
                                 font.pointSize: 15
 
@@ -739,7 +739,7 @@ Item {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
 
-                            text: CalendarUtils.getNepaliMonthName(index + 1, fullRep.compactDateViewLanguage)
+                            text: CalendarUtils.getNepaliMonthName(index + 1, fullRep.compactplusGridDateViewLanguage)
                             font.family: "Noto Sans Devanagari"
                             font.pointSize: 14
 

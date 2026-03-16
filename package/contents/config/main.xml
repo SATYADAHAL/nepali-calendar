@@ -22,7 +22,7 @@
             <default>nepali</default>
         </entry>
 
-        <entry name="compactDateViewLanguage" type="String">
+        <entry name="compactplusGridDateViewLanguage" type="String">
             <default>nepali</default>
         </entry>
     </group>

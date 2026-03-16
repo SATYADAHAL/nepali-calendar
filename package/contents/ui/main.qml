@@ -33,9 +33,9 @@ PlasmoidItem {
     property bool isNotTodayMonth: currentBsYear !== todayBsInfo.bsYear || currentBsMonth !== todayBsInfo.bsMonth
 
     property string headerEnglishDate: CalendarUtils.getFormattedEnglishDate()
-    property string headerNepaliDate: CalendarUtils.toNepaliNumber(todayBsInfo.bsDay, plasmoid.configuration.compactDateViewLanguage) + " " + CalendarUtils.getNepaliMonthName(todayBsInfo.bsMonth, plasmoid.configuration.compactDateViewLanguage) + " " + CalendarUtils.toNepaliNumber(todayBsInfo.bsYear, plasmoid.configuration.compactDateViewLanguage)
+    property string headerNepaliDate: CalendarUtils.toNepaliNumber(todayBsInfo.bsDay, plasmoid.configuration.compactplusGridDateViewLanguage) + " " + CalendarUtils.getNepaliMonthName(todayBsInfo.bsMonth, plasmoid.configuration.compactplusGridDateViewLanguage) + " " + CalendarUtils.toNepaliNumber(todayBsInfo.bsYear, plasmoid.configuration.compactplusGridDateViewLanguage)
 
-    property string nepaliMonth: CalendarUtils.getNepaliMonthName(currentBsMonth, plasmoid.configuration.compactDateViewLanguage) + " " + CalendarUtils.toNepaliNumber(currentBsYear, plasmoid.configuration.compactDateViewLanguage)
+    property string nepaliMonth: CalendarUtils.getNepaliMonthName(currentBsMonth, plasmoid.configuration.compactplusGridDateViewLanguage) + " " + CalendarUtils.toNepaliNumber(currentBsYear, plasmoid.configuration.compactplusGridDateViewLanguage)
     property string englishMonthAndYear: CalendarUtils.getEnglishMonthRangeFromBs(currentBsYear, currentBsMonth)
 
     property var calendarGridData: CalendarUtils.generateCalendarGrid(currentBsYear, currentBsMonth, todayBsDay)
@@ -172,7 +172,7 @@ PlasmoidItem {
         currentBsMonth = prevMonth;
         todayBsDay = 0;
         calendarGridData = CalendarUtils.generateCalendarGrid(currentBsYear, currentBsMonth, todayBsDay);
-        nepaliMonth = CalendarUtils.getNepaliMonthName(currentBsMonth, plasmoid.configuration.compactDateViewLanguage) + " " + CalendarUtils.toNepaliNumber(currentBsYear, plasmoid.configuration.compactDateViewLanguage);
+        nepaliMonth = CalendarUtils.getNepaliMonthName(currentBsMonth, plasmoid.configuration.compactplusGridDateViewLanguage) + " " + CalendarUtils.toNepaliNumber(currentBsYear, plasmoid.configuration.compactplusGridDateViewLanguage);
         englishMonthAndYear = CalendarUtils.getEnglishMonthRangeFromBs(currentBsYear, currentBsMonth);
 
         if (prevYear === todayBsInfo.bsYear && prevMonth === todayBsInfo.bsMonth) {
@@ -198,7 +198,7 @@ PlasmoidItem {
         currentBsMonth = nextMonth;
         todayBsDay = 0;
         calendarGridData = CalendarUtils.generateCalendarGrid(currentBsYear, currentBsMonth, todayBsDay);
-        nepaliMonth = CalendarUtils.getNepaliMonthName(currentBsMonth, plasmoid.configuration.compactDateViewLanguage) + " " + CalendarUtils.toNepaliNumber(currentBsYear, plasmoid.configuration.compactDateViewLanguage);
+        nepaliMonth = CalendarUtils.getNepaliMonthName(currentBsMonth, plasmoid.configuration.compactplusGridDateViewLanguage) + " " + CalendarUtils.toNepaliNumber(currentBsYear, plasmoid.configuration.compactplusGridDateViewLanguage);
         englishMonthAndYear = CalendarUtils.getEnglishMonthRangeFromBs(currentBsYear, currentBsMonth);
 
         if (nextYear === todayBsInfo.bsYear && nextMonth === todayBsInfo.bsMonth) {
@@ -211,7 +211,7 @@ PlasmoidItem {
         currentBsYear = todayBsInfo.bsYear;
         currentBsMonth = todayBsInfo.bsMonth;
         todayBsDay = todayBsInfo.bsDay;
-        nepaliMonth = CalendarUtils.getNepaliMonthName(currentBsMonth, plasmoid.configuration.compactDateViewLanguage) + " " + CalendarUtils.toNepaliNumber(currentBsYear, plasmoid.configuration.compactDateViewLanguage);
+        nepaliMonth = CalendarUtils.getNepaliMonthName(currentBsMonth, plasmoid.configuration.compactplusGridDateViewLanguage) + " " + CalendarUtils.toNepaliNumber(currentBsYear, plasmoid.configuration.compactplusGridDateViewLanguage);
         englishMonthAndYear = CalendarUtils.getEnglishMonthRangeFromBs(currentBsYear, currentBsMonth);
         calendarGridData = CalendarUtils.generateCalendarGrid(currentBsYear, currentBsMonth, todayBsDay);
     }
@@ -224,7 +224,7 @@ PlasmoidItem {
 
             root.expanded = !root.expanded;
         }
-        compactDateViewLanguage: plasmoid.configuration.compactDateViewLanguage
+        compactplusGridDateViewLanguage: plasmoid.configuration.compactplusGridDateViewLanguage
     }
 
     fullRepresentation: FullRepresentation {
@@ -241,7 +241,7 @@ PlasmoidItem {
         showAdDateOnGrid: plasmoid.configuration.showAdDateOnGrid
         showHolidays: plasmoid.configuration.showHolidays
         holidayTitleLanguage: plasmoid.configuration.holidayTitleLanguage
-        compactDateViewLanguage: plasmoid.configuration.compactDateViewLanguage
+        compactplusGridDateViewLanguage: plasmoid.configuration.compactplusGridDateViewLanguage
         getHolidaysForDate: root.getHolidaysForDate
 
         onResetClicked: root.resetToToday()
@@ -251,7 +251,7 @@ PlasmoidItem {
             root.currentBsYear = year
             root.currentBsMonth = month
             root.calendarGridData = CalendarUtils.generateCalendarGrid(root.currentBsYear, root.currentBsMonth, 0)
-            root.nepaliMonth = CalendarUtils.getNepaliMonthName(root.currentBsMonth, plasmoid.configuration.compactDateViewLanguage) + " " + CalendarUtils.toNepaliNumber(root.currentBsYear, plasmoid.configuration.compactDateViewLanguage)
+            root.nepaliMonth = CalendarUtils.getNepaliMonthName(root.currentBsMonth, plasmoid.configuration.compactplusGridDateViewLanguage) + " " + CalendarUtils.toNepaliNumber(root.currentBsYear, plasmoid.configuration.compactplusGridDateViewLanguage)
             root.englishMonthAndYear = CalendarUtils.getEnglishMonthRangeFromBs(root.currentBsYear, root.currentBsMonth)
         }
     }

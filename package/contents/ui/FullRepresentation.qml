@@ -548,7 +548,7 @@ Item {
                 spacing: Kirigami.Units.largeSpacing
 
                 Label {
-                    text: "वर्ष"
+                    text: fullRep.compactplusGridDateViewLanguage === "nepali" ? "वर्ष" : "Year"
                     font.family: "Noto Sans Devanagari"
                     font.weight: 600
                     font.pointSize: 14

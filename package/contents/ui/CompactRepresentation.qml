@@ -29,6 +29,8 @@ MouseArea {
         bsYear: 2081
     })
 
+    property string compactDateViewLanguage: "nepali"
+
     Text {
         id: textLabel
         anchors {
@@ -63,9 +65,9 @@ MouseArea {
         text: {
             if (!todayBsInfo) return ""
 
-            const day = CalendarUtils.toNepaliNumber(todayBsInfo.bsDay)
-            const month = CalendarUtils.getNepaliMonthName(todayBsInfo.bsMonth)
-            const year = CalendarUtils.toNepaliNumber(todayBsInfo.bsYear)
+            const day = CalendarUtils.toNepaliNumber(todayBsInfo.bsDay, compactRoot.compactDateViewLanguage)
+            const month = CalendarUtils.getNepaliMonthName(todayBsInfo.bsMonth, compactRoot.compactDateViewLanguage)
+            const year = CalendarUtils.toNepaliNumber(todayBsInfo.bsYear, compactRoot.compactDateViewLanguage)
             const dateFormat = plasmoid.configuration.dateFormat
 
             switch (dateFormat) {

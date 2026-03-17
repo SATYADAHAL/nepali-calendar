@@ -384,7 +384,7 @@ Item {
                 model: fullRep.compactplusGridDateViewLanguage === "nepali" ? fullRep.nepaliDays : fullRep.nepaliEnglishDays
                 Label {
                     text: modelData
-                    font.family: fullRep.compactplusGridDateViewLanguage === "nepali" ? "Noto Sans Devanagari" : "Noto Sans"
+                    font.family: "Noto Sans Devanagari"
                     font.weight: 600
                     font.pointSize: 12
                     horizontalAlignment: Text.AlignHCenter
@@ -547,13 +547,41 @@ Item {
                 visible: fullRep.pickerState === "year"
                 spacing: Kirigami.Units.largeSpacing
 
-                Label {
-                    text: fullRep.compactplusGridDateViewLanguage === "nepali" ? "वर्ष" : "Year"
-                    font.family: "Noto Sans Devanagari"
-                    font.weight: 600
-                    font.pointSize: 14
-                    Layout.alignment: Qt.AlignHCenter
-                    opacity: 0.9
+                RowLayout {
+                    Layout.fillWidth: true
+
+                    Button {
+                        flat: true
+                        implicitWidth: 20
+                        implicitHeight: 20
+                        Layout.alignment: Qt.AlignLeft
+
+                        contentItem: IconArrowLeft {
+                            iconWidth: 16
+                            iconHeight: 16
+                            fillColor: Kirigami.Theme.textColor
+                            anchors.centerIn: parent
+                        }
+
+                        onClicked: fullRep.showingYearMonthPicker = false
+                    }
+
+                    Item {
+                        Layout.fillWidth: true
+                    }
+
+                    Label {
+                        text: fullRep.compactplusGridDateViewLanguage === "nepali" ? "वर्ष" : "Year"
+                        font.family: "Noto Sans Devanagari"
+                        font.weight: 600
+                        font.pointSize: 14
+                        Layout.alignment: Qt.AlignHCenter
+                        opacity: 0.9
+                    }
+
+                    Item {
+                        Layout.fillWidth: true
+                    }
                 }
 
                 // Year navigation with grid

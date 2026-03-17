@@ -706,7 +706,7 @@ Item {
                     }
 
                     Label {
-                        text: "महिना"
+                        text: fullRep.compactplusGridDateViewLanguage === "nepali" ? "महिना" : "Month"
                         font.family: "Noto Sans Devanagari"
                         font.weight: 600
                         font.pointSize: 13

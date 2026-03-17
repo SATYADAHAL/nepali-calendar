@@ -65,6 +65,14 @@ Kirigami.FormLayout {
         }
     }
 
+    property alias cfg_firstDayOfWeek: firstDayOfWeekCombo.currentIndex
+
+    QQC2.ComboBox {
+        id: firstDayOfWeekCombo
+        Kirigami.FormData.label: i18n("First day of week:")
+        model: [i18n("Sunday"), i18n("Monday")]
+    }
+
       // === Compact Date View + Calendar Grid Section ===
     Kirigami.Heading {
         level: 3

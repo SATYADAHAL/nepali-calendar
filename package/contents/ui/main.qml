@@ -41,8 +41,8 @@ PlasmoidItem {
     property var calendarGridData: CalendarUtils.generateCalendarGrid(currentBsYear, currentBsMonth, todayBsDay)
 
     property var nepaliDigits: ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"]
-    property var nepaliDays: ["आइत", "सोम", "मंगल", "बुध", "बिही", "शुक्र", "शनि"]
-    property var nepaliEnglishDays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    property var nepaliDays: plasmoid.configuration.firstDayOfWeek === 0 ? ["आइत", "सोम", "मंगल", "बुध", "बिही", "शुक्र", "शनि"] : ["सोम", "मंगल", "बुध", "बिही", "शुक्र", "शनि", "आइत"]
+    property var nepaliEnglishDays: plasmoid.configuration.firstDayOfWeek === 0 ? ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     property string lastAdDate: ""
     property var holidaysData: HolidaysData.ALL_HOLIDAYS
 
@@ -242,6 +242,7 @@ PlasmoidItem {
         showHolidays: plasmoid.configuration.showHolidays
         holidayTitleLanguage: plasmoid.configuration.holidayTitleLanguage
         compactplusGridDateViewLanguage: plasmoid.configuration.compactplusGridDateViewLanguage
+        firstDayOfWeek: plasmoid.configuration.firstDayOfWeek
         getHolidaysForDate: root.getHolidaysForDate
 
         onResetClicked: root.resetToToday()

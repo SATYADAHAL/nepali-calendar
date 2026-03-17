@@ -33,6 +33,7 @@ Item {
     property bool showHolidays: true
     property string holidayTitleLanguage: "nepali"
     property string compactplusGridDateViewLanguage: "nepali"
+    property int firstDayOfWeek: 0
     property var getHolidaysForDate: function(year, month, day) {
         return [];
     }
@@ -408,9 +409,12 @@ Item {
                 model: fullRep.calendarGridData.length
 
                 Rectangle {
-                    property var dayInfo: fullRep.calendarGridData[index] || {}
+                    property int shiftedIndex: (fullRep.firstDayOfWeek === 1) ? (index + 1) : index
+                    property var dayInfo: (shiftedIndex < fullRep.calendarGridData.length) 
+                              ? fullRep.calendarGridData[shiftedIndex] 
+                              : {}
                     property bool isCurrentMonth: dayInfo.isCurrentMonth || false
-                    property bool isSaturday: (index % 7) === 6
+                    property bool isWeekend: (index % 7) === 6
                     property bool isToday: dayInfo.isToday || false
                     property int nepaliDay: dayInfo.bsDay || 0
                     property var holidays: isCurrentMonth && fullRep.showHolidays ?
@@ -465,7 +469,7 @@ Item {
                                 font.pointSize: fullRep.showAdDateOnGrid ? 15 : 17
                                 width: parent.width
                                 horizontalAlignment: Text.AlignHCenter
-                                color: isSaturday ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+                                color: isWeekend ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
                                 opacity: isCurrentMonth ? 1.0 : 0.35
                             }
 
@@ -481,7 +485,7 @@ Item {
                                     font.weight: Font.Normal
                                     anchors.centerIn: parent
                                     anchors.horizontalCenterOffset: -5
-                                    color: isSaturday ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+                                    color: isWeekend ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
                                     opacity: isCurrentMonth ? 0.90 : 0.35
                                 }
                             }

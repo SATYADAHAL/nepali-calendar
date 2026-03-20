@@ -17,7 +17,7 @@ Kirigami.FormLayout {
     QQC2.ComboBox {
         id: dateFormatCombo
         Kirigami.FormData.label: i18n("Date format:")
-        model: [i18n("DD-MM"), i18n("MM-DD"), i18n("MM/DD/YYYY"),i18n("DD/MM/YYYY")]
+        model: [i18n("DD-MM"), i18n("MM-DD"), i18n("MM/DD/YYYY"),i18n("DD/MM/YYYY"),i18n("YYYY/MM/DD")]
     }
 
     // === Calendar Grid Section ===

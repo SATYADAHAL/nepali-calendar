@@ -79,6 +79,8 @@ MouseArea {
                 return `${month} ${day}, ${year}`
             case 3:
                 return `${day} ${month}, ${year}`
+            case 4:
+                return `${year}, ${month} ${day}`
             default:
                 return `${day} ${month}`
             }

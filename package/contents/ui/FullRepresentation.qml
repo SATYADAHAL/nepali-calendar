@@ -25,12 +25,14 @@ Item {
     property string englishMonthAndYear: ""
     property var calendarGridData: []
     property var nepaliDays: []
+    property var nepaliEnglishDays: []
     property bool isNotTodayMonth: false
     property int currentBsYear: 2081
     property int currentBsMonth: 1
     property bool showAdDateOnGrid: true
     property bool showHolidays: true
     property string holidayTitleLanguage: "nepali"
+    property string compactplusGridDateViewLanguage: "nepali"
     property var getHolidaysForDate: function(year, month, day) {
         return [];
     }
@@ -379,7 +381,7 @@ Item {
             Layout.fillWidth: true
             visible: !fullRep.showingYearMonthPicker
             Repeater {
-                model: fullRep.nepaliDays
+                model: fullRep.compactplusGridDateViewLanguage === "nepali" ? fullRep.nepaliDays : fullRep.nepaliEnglishDays
                 Label {
                     text: modelData
                     font.family: "Noto Sans Devanagari"
@@ -457,7 +459,7 @@ Item {
                             width: parent.width
 
                             Label {
-                                text: CalendarUtils.toNepaliNumber(nepaliDay)
+                                text: CalendarUtils.toNepaliNumber(nepaliDay, fullRep.compactplusGridDateViewLanguage)
                                 font.family: "Noto Sans Devanagari"
                                 font.weight: Font.Medium
                                 font.pointSize: fullRep.showAdDateOnGrid ? 15 : 17
@@ -545,13 +547,41 @@ Item {
                 visible: fullRep.pickerState === "year"
                 spacing: Kirigami.Units.largeSpacing
 
-                Label {
-                    text: "वर्ष"
-                    font.family: "Noto Sans Devanagari"
-                    font.weight: 600
-                    font.pointSize: 14
-                    Layout.alignment: Qt.AlignHCenter
-                    opacity: 0.9
+                RowLayout {
+                    Layout.fillWidth: true
+
+                    Button {
+                        flat: true
+                        implicitWidth: 20
+                        implicitHeight: 20
+                        Layout.alignment: Qt.AlignLeft
+
+                        contentItem: IconArrowLeft {
+                            iconWidth: 16
+                            iconHeight: 16
+                            fillColor: Kirigami.Theme.textColor
+                            anchors.centerIn: parent
+                        }
+
+                        onClicked: fullRep.showingYearMonthPicker = false
+                    }
+
+                    Item {
+                        Layout.fillWidth: true
+                    }
+
+                    Label {
+                        text: fullRep.compactplusGridDateViewLanguage === "nepali" ? "वर्ष" : "Year"
+                        font.family: "Noto Sans Devanagari"
+                        font.weight: 600
+                        font.pointSize: 14
+                        Layout.alignment: Qt.AlignHCenter
+                        opacity: 0.9
+                    }
+
+                    Item {
+                        Layout.fillWidth: true
+                    }
                 }
 
                 // Year navigation with grid
@@ -600,7 +630,7 @@ Item {
 
                                 enabled: isValid
 
-                                text: isValid ? CalendarUtils.toNepaliNumber(yearValue) : ""
+                                text: isValid ? CalendarUtils.toNepaliNumber(yearValue, fullRep.compactplusGridDateViewLanguage) : ""
                                 font.family: "Noto Sans Devanagari"
                                 font.pointSize: 15
 
@@ -704,7 +734,7 @@ Item {
                     }
 
                     Label {
-                        text: "महिना"
+                        text: fullRep.compactplusGridDateViewLanguage === "nepali" ? "महिना" : "Month"
                         font.family: "Noto Sans Devanagari"
                         font.weight: 600
                         font.pointSize: 13
@@ -737,7 +767,7 @@ Item {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
 
-                            text: CalendarUtils.getNepaliMonthName(index + 1)
+                            text: CalendarUtils.getNepaliMonthName(index + 1, fullRep.compactplusGridDateViewLanguage)
                             font.family: "Noto Sans Devanagari"
                             font.pointSize: 14
 

@@ -131,7 +131,7 @@ export function getTodayBsInfo() {
   };
 }
 
-export function getNepaliMonthName(n) {
+export function getNepaliMonthName(n, language) {
   const nepaliMonths = [
     'बैशाख',
     'जेठ',
@@ -146,16 +146,43 @@ export function getNepaliMonthName(n) {
     'फाल्गुण',
     'चैत्र',
   ];
-  return nepaliMonths[n - 1] || '';
+  const nepaliEnglishMonths = [
+  'Baishakh',
+  'Jestha',
+  'Ashadh',
+  'Shrawan',
+  'Bhadra',
+  'Ashwin',
+  'Kartik',
+  'Mangsir',
+  'Poush',
+  'Magh',
+  'Falgun',
+  'Chaitra',
+  ];
+  if (language === 'nepali'){
+    return nepaliMonths[n - 1] || '';
+  } else {
+    return nepaliEnglishMonths[n - 1] || '';
+  }
 }
 
-export function toNepaliNumber(num) {
+export function toNepaliNumber(num, language) {
   const nepaliDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
-  return num
-    .toString()
-    .split('')
-    .map((c) => (/\d/.test(c) ? nepaliDigits[parseInt(c)] : c))
-    .join('');
+  const englishDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  if (language === 'nepali'){
+    return num
+      .toString()
+      .split('')
+      .map((c) => (/\d/.test(c) ? nepaliDigits[parseInt(c)] : c))
+      .join('');
+  } else {
+     return num
+      .toString()
+      .split('')
+      .map((c) => (/\d/.test(c) ? englishDigits[parseInt(c)] : c))
+      .join('');
+  }
 }
 
 export function getFormattedEnglishDate(date = new Date()) {

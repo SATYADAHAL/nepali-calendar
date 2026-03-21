@@ -13,6 +13,7 @@ Available on KDE Store:
   <tr>
     <td><img src="assets/breeze_light.png" alt="Light Theme 1" width="300"/></td>
     <td><img src="assets/breeze_dark.png" alt="Dark Theme 2" width="300"/></td>
+    <td><img src="assets/breeze_dark_english.png" alt="Dark Theme 3" width="300"/></td>
   </tr>
 </table>
 
@@ -21,6 +22,7 @@ Available on KDE Store:
 - Month/year navigation and picker
 - Holiday support (partial)
 - Lightweight - no external API calls
+- Nepali/English Font support
 
 ---
 

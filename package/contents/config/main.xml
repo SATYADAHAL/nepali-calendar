@@ -21,9 +21,5 @@
         <entry name="holidayTitleLanguage" type="String">
             <default>nepali</default>
         </entry>
-
-        <entry name="compactplusGridDateViewLanguage" type="String">
-            <default>nepali</default>
-        </entry>
     </group>
 </kcfg>

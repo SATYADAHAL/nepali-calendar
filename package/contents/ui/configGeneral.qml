@@ -64,32 +64,4 @@ Kirigami.FormLayout {
             onToggled: if (checked) cfg_holidayTitleLanguage = "english"
         }
     }
-
-      // === Compact Date View + Calendar Grid Section ===
-    Kirigami.Heading {
-        level: 3
-        text: i18n("Compact Date View + Calendar Grid Section")
-    }
-
-    property string cfg_compactplusGridDateViewLanguage
-
-    RowLayout {
-        Kirigami.FormData.label: i18n("Language:")
-        spacing: Kirigami.Units.largeSpacing
-
-        QQC2.RadioButton {
-            id: languageNepaliRadio
-            text: i18n("Nepali")
-            checked: cfg_compactplusGridDateViewLanguage === "nepali"
-            onToggled: if (checked) cfg_compactplusGridDateViewLanguage = "nepali"
-        }
-
-        QQC2.RadioButton {
-            id: languageEnglishRadio
-            text: i18n("English")
-            checked: cfg_compactplusGridDateViewLanguage === "english"
-            onToggled: if (checked) cfg_compactplusGridDateViewLanguage = "english"
-        }
-    }
-
 }

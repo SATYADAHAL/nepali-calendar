@@ -29,7 +29,14 @@ MouseArea {
         bsYear: 2081
     })
 
-    property string compactplusGridDateViewLanguage: "nepali"
+    property string language: "nepali"
+    property int fontSize: 1
+
+    // Helper function to get font size multiplier
+    function getFontSizeMultiplier() {
+        const multipliers = [0.85, 1.0, 1.15]
+        return multipliers[fontSize]
+    }
 
     Text {
         id: textLabel
@@ -39,12 +46,13 @@ MouseArea {
             verticalCenterOffset: Kirigami.Units.smallSpacing * 0.5
         }
 
-        font.family: "Noto Sans Devanagari"
+        font.family: compactRoot.language === "nepali" ? "Noto Sans Devanagari" : Kirigami.Theme.defaultFont.family
         color: Kirigami.Theme.textColor
 
         // Dynamic font sizing that considers both height and width constraints
         font.pixelSize: {
-            const baseSize = Math.max(12, parent.height * 0.95)
+            const fontMultiplier = compactRoot.getFontSizeMultiplier()
+            const baseSize = Math.max(12, parent.height * 0.95) * fontMultiplier
 
             const metrics = textMetrics
             metrics.font.pixelSize = baseSize
@@ -65,9 +73,9 @@ MouseArea {
         text: {
             if (!todayBsInfo) return ""
 
-            const day = CalendarUtils.toNepaliNumber(todayBsInfo.bsDay, compactRoot.compactplusGridDateViewLanguage)
-            const month = CalendarUtils.getNepaliMonthName(todayBsInfo.bsMonth, compactRoot.compactplusGridDateViewLanguage)
-            const year = CalendarUtils.toNepaliNumber(todayBsInfo.bsYear, compactRoot.compactplusGridDateViewLanguage)
+            const day = CalendarUtils.toNepaliNumber(todayBsInfo.bsDay, compactRoot.language)
+            const month = CalendarUtils.getNepaliMonthName(todayBsInfo.bsMonth, compactRoot.language)
+            const year = CalendarUtils.toNepaliNumber(todayBsInfo.bsYear, compactRoot.language)
             const dateFormat = plasmoid.configuration.dateFormat
 
             switch (dateFormat) {

@@ -1,0 +1,168 @@
+name: Release Automation
+
+on:
+  push:
+    branches:
+      - 'release/**'  # Triggers on release branches like release/v1.2.3
+  workflow_dispatch:  # Allow manual trigger
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.2.3)'
+        required: true
+        type: string
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch all history for changelog generation
+    
+    - name: Determine version
+      id: version
+      run: |
+        if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+          VERSION="${{ github.event.inputs.version }}"
+        else
+          # Extract version from branch name (release/v1.2.3 -> v1.2.3)
+          VERSION=$(echo "${{ github.ref_name }}" | sed 's/release\///')
+        fi
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "version_no_v=${VERSION#v}" >> $GITHUB_OUTPUT
+        echo "Release version: ${VERSION}"
+    
+    - name: Update version in metadata.json
+      run: |
+        VERSION="${{ steps.version.outputs.version_no_v }}"
+        if [[ -f "package/metadata.json" ]]; then
+          sed -i "s/\"Version\": \".*\"/\"Version\": \"${VERSION}\"/" package/metadata.json
+          echo "Updated metadata.json version to ${VERSION}"
+        fi
+    
+    - name: Make build script executable
+      run: chmod +x build.sh
+    
+    - name: Build plasmoid package
+      run: |
+        ./build.sh
+        ls -la build/
+    
+    - name: Generate changelog
+      id: changelog
+      run: |
+        # Generate changelog from git commits since last tag
+        LAST_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+        if [[ -n "$LAST_TAG" ]]; then
+          echo "## Changes since ${LAST_TAG}" > CHANGELOG.md
+          git log --pretty=format="- %s" ${LAST_TAG}..HEAD >> CHANGELOG.md
+        else
+          echo "## Initial Release" > CHANGELOG.md
+          echo "- First release of Nepali Calendar Plasmoid" >> CHANGELOG.md
+        fi
+        
+        # Add version-specific notes if they exist
+        if [[ -f "release-notes/${{ steps.version.outputs.version }}.md" ]]; then
+          echo "" >> CHANGELOG.md
+          cat "release-notes/${{ steps.version.outputs.version }}.md" >> CHANGELOG.md
+        fi
+        
+        echo "Generated changelog:"
+        cat CHANGELOG.md
+    
+    - name: Create GitHub Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version.outputs.version }}
+        release_name: "Nepali Calendar ${{ steps.version.outputs.version }}"
+        body_path: CHANGELOG.md
+        draft: false
+        prerelease: false
+    
+    - name: Upload plasmoid package
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: build/nepali-calendar.plasmoid
+        asset_name: nepali-calendar-${{ steps.version.outputs.version_no_v }}.plasmoid
+        asset_content_type: application/zip
+    
+    - name: Create KDE Store package
+      run: |
+        # Create a special package for KDE store with metadata
+        mkdir -p kde-store
+        cp build/nepali-calendar.plasmoid kde-store/
+        
+        # Create KDE store description
+        cat > kde-store/DESCRIPTION.md << EOF
+        # Nepali Calendar Plasmoid ${{ steps.version.outputs.version }}
+        
+        A comprehensive Nepali calendar widget for KDE Plasma.
+        
+        ## Features
+        - Nepali (Bikram Sambat) and English (Gregorian) calendar display
+        - Configurable language support (Nepali/English)
+        - Adjustable font sizes (Small/Default/Large)
+        - Flexible week start day (Sunday/Monday)
+        - Holiday highlighting with toggle option
+        - Weekend highlighting with smart detection
+        - Compact and full calendar views
+        - AD date display on calendar grid
+        
+        ## Installation
+        1. Download the .plasmoid file
+        2. Right-click on desktop → Add Widgets
+        3. Get New Widgets → Install Widget From Local File
+        4. Select the downloaded .plasmoid file
+        
+        ## Changelog
+        EOF
+        
+        cat CHANGELOG.md >> kde-store/DESCRIPTION.md
+        
+        echo "KDE Store package prepared in kde-store/"
+        ls -la kde-store/
+    
+    - name: Upload KDE Store package
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: kde-store/DESCRIPTION.md
+        asset_name: kde-store-description-${{ steps.version.outputs.version_no_v }}.md
+        asset_content_type: text/markdown
+    
+    - name: Create deployment summary
+      run: |
+        cat >> $GITHUB_STEP_SUMMARY << EOF
+        # Release ${{ steps.version.outputs.version }} Deployed Successfully!
+        
+        ## Artifacts Created
+        - **Plasmoid Package**: \`nepali-calendar-${{ steps.version.outputs.version_no_v }}.plasmoid\`
+        - **KDE Store Description**: \`kde-store-description-${{ steps.version.outputs.version_no_v }}.md\`
+        
+        ## Next Steps
+        1. GitHub Release created automatically
+        2. Binary uploaded to GitHub releases
+        3. **Manual**: Update KDE Store with new binary and description
+        
+        ## KDE Store Update Process
+        1. Go to [KDE Store](https://store.kde.org)
+        2. Upload \`nepali-calendar-${{ steps.version.outputs.version_no_v }}.plasmoid\`
+        3. Copy description from \`kde-store-description-${{ steps.version.outputs.version_no_v }}.md\`
+        4. Set version to \`${{ steps.version.outputs.version_no_v }}\`
+        
+        ## Release Stats
+        - **Version**: ${{ steps.version.outputs.version }}
+        - **Build Time**: $(date)
+        - **Commit**: ${{ github.sha }}
+        - **Trigger**: ${{ github.event_name }}
+        EOF

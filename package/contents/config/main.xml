@@ -18,12 +18,20 @@
             <default>true</default>
         </entry>
 
-        <entry name="holidayTitleLanguage" type="String">
+        <entry name="language" type="String">
             <default>nepali</default>
         </entry>
 
-        <entry name="compactplusGridDateViewLanguage" type="String">
-            <default>nepali</default>
+        <entry name="fontSize" type="Int">
+            <default>1</default>
+        </entry>
+
+        <entry name="firstDayOfWeek" type="Int">
+            <default>0</default>
+        </entry>
+
+        <entry name="showWeekendHighlight" type="Bool">
+            <default>true</default>
         </entry>
     </group>
 </kcfg>

@@ -31,7 +31,8 @@ export const CONSTANT_HOLIDAYS_BS = [
   {
     month: 1,
     day: 1,
-    title: 'Naya Barsha (New Year)',
+    title: 'New Year',
+    titleDevnagari: 'नयाँ बर्ष',
     description: 'Baisakh 1 - Nepali New Year, nationwide public holiday.',
   },
   {

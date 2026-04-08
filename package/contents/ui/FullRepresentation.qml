@@ -31,10 +31,19 @@ Item {
     property int currentBsMonth: 1
     property bool showAdDateOnGrid: true
     property bool showHolidays: true
-    property string holidayTitleLanguage: "nepali"
-    property string compactplusGridDateViewLanguage: "nepali"
+    property string language: "nepali"
+    property int fontSize: 1
+    property int firstDayOfWeek: 0
+    property bool showWeekendHighlight: true
     property var getHolidaysForDate: function(year, month, day) {
         return [];
+    }
+
+    // Helper function to calculate font size based on base size and fontSize setting
+    // fontSize: 0 = Small, 1 = Default, 2 = Large
+    function getFontSize(baseSize) {
+        const multipliers = [0.85, 1.0, 1.15]
+        return baseSize * multipliers[fontSize]
     }
 
     signal resetClicked()
@@ -156,8 +165,8 @@ Item {
                 spacing: -5
                 Label {
                     text: fullRep.headerNepaliDate
-                    font.pointSize: 16
-                    font.family: "Noto Sans Devanagari"
+                    font.pointSize: fullRep.getFontSize(16)
+                    font.family: fullRep.language === "nepali" ? "Noto Sans Devanagari" : Kirigami.Theme.defaultFont.family
                     font.weight: 600
                     horizontalAlignment: Text.AlignLeft
                     Layout.fillWidth: true
@@ -166,7 +175,7 @@ Item {
 
                 Label {
                     text: fullRep.headerEnglishDate
-                    font.pointSize: 11
+                    font.pointSize: fullRep.getFontSize(11)
                     opacity: 0.85
                     horizontalAlignment: Text.AlignLeft
                     Layout.fillWidth: true
@@ -306,9 +315,9 @@ Item {
                     ColumnLayout {
                         Label {
                             text: fullRep.nepaliMonth
-                            font.family: "Noto Sans Devanagari"
+                            font.family: fullRep.language === "nepali" ? "Noto Sans Devanagari" : Kirigami.Theme.defaultFont.family
                             font.weight: 600
-                            font.pointSize: 17
+                            font.pointSize: fullRep.getFontSize(17)
                             horizontalAlignment: Text.AlignHCenter
                             Layout.fillWidth: true
                             opacity: 0.95
@@ -316,7 +325,7 @@ Item {
                         spacing: -4
                         Label {
                             text: fullRep.englishMonthAndYear
-                            font.pointSize: 10
+                            font.pointSize: fullRep.getFontSize(10)
                             opacity: 0.85
                             horizontalAlignment: Text.AlignHCenter
                             Layout.fillWidth: true
@@ -381,16 +390,28 @@ Item {
             Layout.fillWidth: true
             visible: !fullRep.showingYearMonthPicker
             Repeater {
-                model: fullRep.compactplusGridDateViewLanguage === "nepali" ? fullRep.nepaliDays : fullRep.nepaliEnglishDays
+                model: fullRep.language === "nepali" ? fullRep.nepaliDays : fullRep.nepaliEnglishDays
                 Label {
                     text: modelData
-                    font.family: "Noto Sans Devanagari"
+                    font.family: fullRep.language === "nepali" ? "Noto Sans Devanagari" : Kirigami.Theme.defaultFont.family
                     font.weight: 600
-                    font.pointSize: 12
+                    font.pointSize: fullRep.getFontSize(12)
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
                     Layout.preferredWidth: 1
-                    color: index === 6 ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+                    color: {
+                        if (!fullRep.showWeekendHighlight) {
+                            return Kirigami.Theme.textColor;
+                        }
+                        // Smart weekend detection for day names
+                        if (fullRep.firstDayOfWeek === 1) {
+                            // Monday-first: Saturday (index 5) and Sunday (index 6) are weekends
+                            return (index === 5 || index === 6) ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor;
+                        } else {
+                            // Sunday-first: Saturday (index 6) is weekend
+                            return (index === 6) ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor;
+                        }
+                    }
                     opacity: 0.95
                 }
             }
@@ -410,7 +431,18 @@ Item {
                 Rectangle {
                     property var dayInfo: fullRep.calendarGridData[index] || {}
                     property bool isCurrentMonth: dayInfo.isCurrentMonth || false
-                    property bool isSaturday: (index % 7) === 6
+                    property bool isWeekend: {
+                        // Smart weekend highlighting based on firstDayOfWeek
+                        // Sunday-first (0): Saturday only (index 6)
+                        // Monday-first (1): Saturday and Sunday (indices 5 and 6)
+                        if (fullRep.firstDayOfWeek === 1) {
+                            // Monday-first: highlight both Saturday (5) and Sunday (6)
+                            return (index % 7) === 5 || (index % 7) === 6;
+                        } else {
+                            // Sunday-first: highlight Saturday only (6)
+                            return (index % 7) === 6;
+                        }
+                    }
                     property bool isToday: dayInfo.isToday || false
                     property int nepaliDay: dayInfo.bsDay || 0
                     property var holidays: isCurrentMonth && fullRep.showHolidays ?
@@ -459,13 +491,13 @@ Item {
                             width: parent.width
 
                             Label {
-                                text: CalendarUtils.toNepaliNumber(nepaliDay, fullRep.compactplusGridDateViewLanguage)
-                                font.family: "Noto Sans Devanagari"
+                                text: CalendarUtils.toNepaliNumber(nepaliDay, fullRep.language)
+                                font.family: fullRep.language === "nepali" ? "Noto Sans Devanagari" : Kirigami.Theme.defaultFont.family
                                 font.weight: Font.Medium
-                                font.pointSize: fullRep.showAdDateOnGrid ? 15 : 17
+                                font.pointSize: fullRep.getFontSize(fullRep.showAdDateOnGrid ? 15 : 17)
                                 width: parent.width
                                 horizontalAlignment: Text.AlignHCenter
-                                color: isSaturday ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+                                color: (isWeekend && fullRep.showWeekendHighlight) ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
                                 opacity: isCurrentMonth ? 1.0 : 0.35
                             }
 
@@ -477,11 +509,11 @@ Item {
                                 Label {
                                     id: englishLabel
                                     text: dayInfo.adDay || ""
-                                    font.pointSize: Kirigami.Theme.smallFont.pointSize * 0.85 + 1
+                                    font.pointSize: fullRep.getFontSize(Kirigami.Theme.smallFont.pointSize * 0.85 + 1)
                                     font.weight: Font.Normal
                                     anchors.centerIn: parent
                                     anchors.horizontalCenterOffset: -5
-                                    color: isSaturday ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+                                    color: (isWeekend && fullRep.showWeekendHighlight) ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
                                     opacity: isCurrentMonth ? 0.90 : 0.35
                                 }
                             }
@@ -509,8 +541,8 @@ Item {
 
                         contentItem: Label {
                             text: holidayTooltip.text
-                            font.pointSize: 13
-                            font.family: fullRep.holidayTitleLanguage === "nepali" ? "Noto Sans Devanagari" : Kirigami.Theme.defaultFont.family
+                            font.pointSize: fullRep.getFontSize(13)
+                            font.family: fullRep.language === "nepali" ? "Noto Sans Devanagari" : Kirigami.Theme.defaultFont.family
 
                             color: Kirigami.Theme.textColor
                         }
@@ -571,10 +603,10 @@ Item {
                     }
 
                     Label {
-                        text: fullRep.compactplusGridDateViewLanguage === "nepali" ? "वर्ष" : "Year"
-                        font.family: "Noto Sans Devanagari"
+                        text: fullRep.language === "nepali" ? "वर्ष" : "Year"
+                        font.family: fullRep.language === "nepali" ? "Noto Sans Devanagari" : Kirigami.Theme.defaultFont.family
                         font.weight: 600
-                        font.pointSize: 14
+                        font.pointSize: fullRep.getFontSize(14)
                         Layout.alignment: Qt.AlignHCenter
                         opacity: 0.9
                     }
@@ -630,9 +662,9 @@ Item {
 
                                 enabled: isValid
 
-                                text: isValid ? CalendarUtils.toNepaliNumber(yearValue, fullRep.compactplusGridDateViewLanguage) : ""
-                                font.family: "Noto Sans Devanagari"
-                                font.pointSize: 15
+                                text: isValid ? CalendarUtils.toNepaliNumber(yearValue, fullRep.language) : ""
+                                font.family: fullRep.language === "nepali" ? "Noto Sans Devanagari" : Kirigami.Theme.defaultFont.family
+                                font.pointSize: fullRep.getFontSize(15)
 
                                 background: Rectangle {
                                     radius: 6
@@ -734,10 +766,10 @@ Item {
                     }
 
                     Label {
-                        text: fullRep.compactplusGridDateViewLanguage === "nepali" ? "महिना" : "Month"
-                        font.family: "Noto Sans Devanagari"
+                        text: fullRep.language === "nepali" ? "महिना" : "Month"
+                        font.family: fullRep.language === "nepali" ? "Noto Sans Devanagari" : Kirigami.Theme.defaultFont.family
                         font.weight: 600
-                        font.pointSize: 13
+                        font.pointSize: fullRep.getFontSize(13)
                         opacity: 0.9
                         Layout.alignment: Qt.AlignHCenter
                     }
@@ -767,9 +799,9 @@ Item {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
 
-                            text: CalendarUtils.getNepaliMonthName(index + 1, fullRep.compactplusGridDateViewLanguage)
-                            font.family: "Noto Sans Devanagari"
-                            font.pointSize: 14
+                            text: CalendarUtils.getNepaliMonthName(index + 1, fullRep.language)
+                            font.family: fullRep.language === "nepali" ? "Noto Sans Devanagari" : Kirigami.Theme.defaultFont.family
+                            font.pointSize: fullRep.getFontSize(14)
 
                             background: Rectangle {
                                 radius: 6

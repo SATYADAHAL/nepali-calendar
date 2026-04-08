@@ -205,7 +205,7 @@ export function getFormattedEnglishDate(date = new Date()) {
   return `${weekdays[date.getDay()]}, ${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
 }
 
-export function generateCalendarGrid(bsYear, bsMonth, todayBsDay) {
+export function generateCalendarGrid(bsYear, bsMonth, todayBsDay, firstDayOfWeek = 0) {
   if (bsYear < 1970 || !DATE_MAP[bsYear]) {
     const blankDay = {
       bsDay: 0,
@@ -230,7 +230,12 @@ export function generateCalendarGrid(bsYear, bsMonth, todayBsDay) {
     adMonthStartDate.setDate(adMonthStartDate.getDate() + daysOnMonth[m - 1]);
   }
 
-  const firstWeekday = adMonthStartDate.getDay();
+  // Transform weekday based on firstDayOfWeek setting
+  // JavaScript getDay(): 0=Sunday, 1=Monday, ..., 6=Saturday
+  // For firstDayOfWeek=1 (Monday first): shift Sunday(0) to 6, Monday(1) to 0, etc.
+  const rawWeekday = adMonthStartDate.getDay();
+  const firstWeekday = firstDayOfWeek === 1 ? (rawWeekday + 6) % 7 : rawWeekday;
+  
   const calendar = [];
 
   // Previous month

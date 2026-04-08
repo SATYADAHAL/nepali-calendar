@@ -241,7 +241,6 @@ PlasmoidItem {
         englishMonthAndYear: root.englishMonthAndYear
         calendarGridData: root.calendarGridData
         nepaliDays: root.nepaliDays
-        nepaliEnglishDays: root.nepaliEnglishDays
         isNotTodayMonth: root.isNotTodayMonth
         currentBsYear: root.currentBsYear
         currentBsMonth: root.currentBsMonth

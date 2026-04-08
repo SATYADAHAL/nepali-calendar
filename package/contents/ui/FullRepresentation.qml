@@ -25,7 +25,6 @@ Item {
     property string englishMonthAndYear: ""
     property var calendarGridData: []
     property var nepaliDays: []
-    property var nepaliEnglishDays: []
     property bool isNotTodayMonth: false
     property int currentBsYear: 2081
     property int currentBsMonth: 1

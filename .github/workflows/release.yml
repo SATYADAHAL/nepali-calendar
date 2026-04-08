@@ -11,6 +11,11 @@ on:
         required: true
         type: string
 
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
@@ -72,28 +77,6 @@ jobs:
         echo "Generated changelog:"
         cat CHANGELOG.md
     
-    - name: Create GitHub Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.version.outputs.version }}
-        release_name: "Nepali Calendar ${{ steps.version.outputs.version }}"
-        body_path: CHANGELOG.md
-        draft: false
-        prerelease: false
-    
-    - name: Upload plasmoid package
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: build/nepali-calendar.plasmoid
-        asset_name: nepali-calendar-${{ steps.version.outputs.version_no_v }}.plasmoid
-        asset_content_type: application/zip
-    
     - name: Create KDE Store package
       run: |
         # Create a special package for KDE store with metadata
@@ -129,16 +112,19 @@ jobs:
         
         echo "KDE Store package prepared in kde-store/"
         ls -la kde-store/
-    
-    - name: Upload KDE Store package
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create GitHub Release
+      id: create_release
+      uses: ncipollo/release-action@v1
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: kde-store/DESCRIPTION.md
-        asset_name: kde-store-description-${{ steps.version.outputs.version_no_v }}.md
-        asset_content_type: text/markdown
+        tag: ${{ steps.version.outputs.version }}
+        name: "Nepali Calendar ${{ steps.version.outputs.version }}"
+        bodyFile: CHANGELOG.md
+        artifacts: "build/nepali-calendar.plasmoid,kde-store/DESCRIPTION.md"
+        artifactContentType: application/zip,text/markdown
+        draft: false
+        prerelease: false
+        token: ${{ secrets.GITHUB_TOKEN }}}
     
     - name: Create deployment summary
       run: |

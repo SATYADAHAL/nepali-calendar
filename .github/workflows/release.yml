@@ -124,7 +124,7 @@ jobs:
         artifactContentType: application/zip,text/markdown
         draft: false
         prerelease: false
-        token: ${{ secrets.GITHUB_TOKEN }}}
+        token: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Create deployment summary
       run: |

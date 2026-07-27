@@ -10,6 +10,7 @@ import org.kde.kirigami 2.20 as Kirigami
 
 import "calendarUtils.mjs" as CalendarUtils
 import "./date-map.mjs" as CalendarData
+import "./panchang-events.mjs" as PanchangEvents
 import "../icons"
 
 Item {
@@ -38,6 +39,11 @@ Item {
     property var getHolidaysForDate: function(year, month, day) {
         return [];
     }
+    property var todayPanchang: null
+    property bool showPanchang: false
+    property bool showFestivalColors: false
+    property var computePanchangForDay: function(y, m, d) { return ""; }
+    property var hasFestivalForDay: function(y, m, d) { return false; }
 
     // Helper function to calculate font size based on base size and fontSize setting
     // fontSize: 0 = Small, 1 = Default, 2 = Large
@@ -179,6 +185,34 @@ Item {
                     opacity: 0.85
                     horizontalAlignment: Text.AlignLeft
                     Layout.fillWidth: true
+                }
+
+                Label {
+                    visible: fullRep.showPanchang && fullRep.todayPanchang !== null
+                    text: {
+                        if (!fullRep.todayPanchang) return "";
+                        var tithiName;
+                        if (fullRep.language === "nepali") {
+                            if (fullRep.todayPanchang.paksha === "Krishna") {
+                                tithiName = PanchangEvents.TITHI_NAMES_KRISHNA_NP[fullRep.todayPanchang.tithi - 1];
+                            } else {
+                                tithiName = PanchangEvents.TITHI_NAMES_NP[fullRep.todayPanchang.tithi - 1];
+                            }
+                        } else {
+                            if (fullRep.todayPanchang.paksha === "Krishna") {
+                                tithiName = PanchangEvents.TITHI_NAMES_KRISHNA_EN[fullRep.todayPanchang.tithi - 1];
+                            } else {
+                                tithiName = PanchangEvents.TITHI_NAMES_EN[fullRep.todayPanchang.tithi - 1];
+                            }
+                        }
+                        return tithiName;
+                    }
+                    font.family: fullRep.language === "nepali" ? "Noto Sans Devanagari" : Kirigami.Theme.defaultFont.family
+                    font.pointSize: fullRep.getFontSize(9)
+                    opacity: 0.65
+                    horizontalAlignment: Text.AlignLeft
+                    Layout.fillWidth: true
+                    elide: Text.ElideRight
                 }
             }
 
@@ -448,6 +482,9 @@ Item {
                     property var holidays: isCurrentMonth && fullRep.showHolidays ?
                     fullRep.getHolidaysForDate(fullRep.currentBsYear, fullRep.currentBsMonth, nepaliDay) : []
                     property bool hasHoliday: holidays.length > 0
+                    property bool hasFestival: fullRep.showFestivalColors && isCurrentMonth && nepaliDay > 0 ?
+                        fullRep.hasFestivalForDay(fullRep.currentBsYear, fullRep.currentBsMonth, nepaliDay) : false
+                    property string hoveredDayPanchangText: ""
 
                     Layout.fillWidth: true
                     Layout.fillHeight: true
@@ -459,6 +496,9 @@ Item {
                             return Qt.rgba(Kirigami.Theme.highlightColor.r,
                                 Kirigami.Theme.highlightColor.g,
                                 Kirigami.Theme.highlightColor.b, 0.1)
+                        }
+                        if (hasFestival) {
+                            return Qt.rgba(0.1, 0.6, 0.65, 0.2)
                         }
                         if (hasHoliday && isCurrentMonth) {
                             return Qt.rgba(Kirigami.Theme.negativeTextColor.r,
@@ -522,21 +562,26 @@ Item {
 
                     ToolTip {
                         id: holidayTooltip
-                        visible: hasHoliday && dayMouseArea.containsMouse
-                        delay: 500
+                        visible: (hasHoliday || hoveredDayPanchangText !== "") && dayMouseArea.containsMouse && isCurrentMonth
+                        delay: 300
                         text: {
-                            if (!hasHoliday) return "";
-                            var text = "";
-                            for (var i = 0; i < holidays.length; i++) {
-                                if (i > 0) text += " | ";
-
-                                if (fullRep.holidayTitleLanguage === "english") {
-                                    text += holidays[i].title;
-                                } else {
-                                    text += holidays[i].titleDevnagari || holidays[i].title;
-                                }
+                            var parts = [];
+                            if (hoveredDayPanchangText !== "") {
+                                parts.push(hoveredDayPanchangText);
                             }
-                            return text;
+                            if (hasHoliday) {
+                                var hText = "";
+                                for (var i = 0; i < holidays.length; i++) {
+                                    if (i > 0) hText += " | ";
+                                    if (fullRep.language === "nepali") {
+                                        hText += holidays[i].titleDevnagari || holidays[i].title;
+                                    } else {
+                                        hText += holidays[i].title;
+                                    }
+                                }
+                                parts.push(hText);
+                            }
+                            return parts.join("\n");
                         }
 
                         contentItem: Label {
@@ -559,6 +604,15 @@ Item {
                         anchors.fill: parent
                         hoverEnabled: true
                         propagateComposedEvents: true
+                        onContainsMouseChanged: {
+                            if (containsMouse && isCurrentMonth && nepaliDay > 0) {
+                                hoveredDayPanchangText = fullRep.computePanchangForDay(
+                                    fullRep.currentBsYear, fullRep.currentBsMonth, nepaliDay
+                                );
+                            } else {
+                                hoveredDayPanchangText = "";
+                            }
+                        }
                     }
                 }
             }

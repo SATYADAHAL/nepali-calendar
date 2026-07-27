@@ -13,6 +13,8 @@ import org.kde.plasma.core 2.1 as PlasmaCore
 import "calendarUtils.mjs" as CalendarUtils
 import "./date-map.mjs" as CalendarData
 import "./holidays.mjs" as HolidaysData
+import "./panchang.mjs" as Panchang
+import "./panchang-events.mjs" as PanchangEvents
 import "../icons"
 
 PlasmoidItem {
@@ -57,11 +59,13 @@ PlasmoidItem {
     property var nepaliEnglishDays: reorderDayArray(nepaliEnglishDaysBase, plasmoid.configuration.firstDayOfWeek)
     property string lastAdDate: ""
     property var holidaysData: HolidaysData.ALL_HOLIDAYS
+    property var todayPanchang: null
 
     Plasmoid.title: "Nepali Calendar"
 
     Component.onCompleted: {
         lastAdDate = new Date().toDateString();
+        computeTodayPanchang();
     }
 
     function getHolidaysForDate(year, month, day) {
@@ -157,6 +161,46 @@ PlasmoidItem {
 
     function dateChanged() {
         resetToToday();
+        computeTodayPanchang();
+    }
+
+    function computeTodayPanchang() {
+        todayPanchang = Panchang.calculatePanchang(
+            todayBsInfo.bsYear, todayBsInfo.bsMonth, todayBsInfo.bsDay
+        );
+    }
+
+    function computePanchangForDay(bsYear, bsMonth, bsDay) {
+        var result = Panchang.calculatePanchang(bsYear, bsMonth, bsDay);
+        if (!result) return "";
+        var tithiName;
+        if (plasmoid.configuration.language === "nepali") {
+            if (result.paksha === "Krishna") {
+                tithiName = PanchangEvents.TITHI_NAMES_KRISHNA_NP[result.tithi - 1];
+            } else {
+                tithiName = PanchangEvents.TITHI_NAMES_NP[result.tithi - 1];
+            }
+        } else {
+            if (result.paksha === "Krishna") {
+                tithiName = PanchangEvents.TITHI_NAMES_KRISHNA_EN[result.tithi - 1];
+            } else {
+                tithiName = PanchangEvents.TITHI_NAMES_EN[result.tithi - 1];
+            }
+        }
+        var text = tithiName;
+        if (result.events.length > 0) {
+            var eventNames = [];
+            for (var i = 0; i < result.events.length; i++) {
+                eventNames.push(result.events[i].event);
+            }
+            text += "\n" + eventNames.join(", ");
+        }
+        return text;
+    }
+
+    function hasFestivalForDay(bsYear, bsMonth, bsDay) {
+        var result = Panchang.calculatePanchang(bsYear, bsMonth, bsDay);
+        return result && result.events.length > 0;
     }
 
     function toNepaliNumber(num) {
@@ -249,8 +293,13 @@ PlasmoidItem {
         showAdDateOnGrid: plasmoid.configuration.showAdDateOnGrid
         showHolidays: plasmoid.configuration.showHolidays
         showWeekendHighlight: plasmoid.configuration.showWeekendHighlight
+        showPanchang: plasmoid.configuration.showPanchang
+        showFestivalColors: plasmoid.configuration.showFestivalColors
         language: plasmoid.configuration.language
         fontSize: plasmoid.configuration.fontSize
+        todayPanchang: root.todayPanchang
+        computePanchangForDay: root.computePanchangForDay
+        hasFestivalForDay: root.hasFestivalForDay
         getHolidaysForDate: root.getHolidaysForDate
 
         onResetClicked: root.resetToToday()

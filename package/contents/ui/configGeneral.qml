@@ -118,4 +118,18 @@ Kirigami.FormLayout {
         text: i18n("Highlight weekends in red")
     }
 
+    property alias cfg_showPanchang: panchangCheck.checked
+
+    QQC2.CheckBox {
+        id: panchangCheck
+        text: i18n("Show today's tithi in header")
+    }
+
+    property alias cfg_showFestivalColors: festivalColorsCheck.checked
+
+    QQC2.CheckBox {
+        id: festivalColorsCheck
+        text: i18n("Color Hindu festival days")
+    }
+
 }

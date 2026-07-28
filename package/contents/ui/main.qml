@@ -66,6 +66,7 @@ PlasmoidItem {
     Component.onCompleted: {
         lastAdDate = new Date().toDateString();
         computeTodayPanchang();
+        precomputeMonthPanchang(currentBsYear, currentBsMonth);
     }
 
     function getHolidaysForDate(year, month, day) {
@@ -170,6 +171,16 @@ PlasmoidItem {
         );
     }
 
+    function precomputeMonthPanchang(bsYear, bsMonth) {
+        var yearData = CalendarData.DATE_MAP[bsYear];
+        if (!yearData || !yearData.daysonmonth) return;
+        var days = yearData.daysonmonth[bsMonth - 1];
+        if (!days) return;
+        for (var d = 1; d <= days; d++) {
+            Panchang.calculatePanchang(bsYear, bsMonth, d);
+        }
+    }
+
     function computePanchangForDay(bsYear, bsMonth, bsDay) {
         var result = Panchang.calculatePanchang(bsYear, bsMonth, bsDay);
         if (!result) return "";
@@ -187,20 +198,11 @@ PlasmoidItem {
                 tithiName = PanchangEvents.TITHI_NAMES_EN[result.tithi - 1];
             }
         }
-        var text = tithiName;
-        if (result.events.length > 0) {
-            var eventNames = [];
-            for (var i = 0; i < result.events.length; i++) {
-                eventNames.push(result.events[i].event);
-            }
-            text += "\n" + eventNames.join(", ");
-        }
-        return text;
+        return tithiName;
     }
 
-    function hasFestivalForDay(bsYear, bsMonth, bsDay) {
-        var result = Panchang.calculatePanchang(bsYear, bsMonth, bsDay);
-        return result && result.events.length > 0;
+    function getPanchangData(bsYear, bsMonth, bsDay) {
+        return Panchang.calculatePanchang(bsYear, bsMonth, bsDay);
     }
 
     function toNepaliNumber(num) {
@@ -227,6 +229,7 @@ PlasmoidItem {
         currentBsYear = prevYear;
         currentBsMonth = prevMonth;
         todayBsDay = 0;
+        precomputeMonthPanchang(currentBsYear, currentBsMonth);
         calendarGridData = CalendarUtils.generateCalendarGrid(currentBsYear, currentBsMonth, todayBsDay, plasmoid.configuration.firstDayOfWeek);
 
         if (prevYear === todayBsInfo.bsYear && prevMonth === todayBsInfo.bsMonth) {
@@ -251,6 +254,7 @@ PlasmoidItem {
         currentBsYear = nextYear;
         currentBsMonth = nextMonth;
         todayBsDay = 0;
+        precomputeMonthPanchang(currentBsYear, currentBsMonth);
         calendarGridData = CalendarUtils.generateCalendarGrid(currentBsYear, currentBsMonth, todayBsDay, plasmoid.configuration.firstDayOfWeek);
 
         if (nextYear === todayBsInfo.bsYear && nextMonth === todayBsInfo.bsMonth) {
@@ -263,6 +267,7 @@ PlasmoidItem {
         currentBsYear = todayBsInfo.bsYear;
         currentBsMonth = todayBsInfo.bsMonth;
         todayBsDay = todayBsInfo.bsDay;
+        precomputeMonthPanchang(currentBsYear, currentBsMonth);
         calendarGridData = CalendarUtils.generateCalendarGrid(currentBsYear, currentBsMonth, todayBsDay, plasmoid.configuration.firstDayOfWeek);
     }
 
@@ -294,12 +299,12 @@ PlasmoidItem {
         showHolidays: plasmoid.configuration.showHolidays
         showWeekendHighlight: plasmoid.configuration.showWeekendHighlight
         showPanchang: plasmoid.configuration.showPanchang
-        showFestivalColors: plasmoid.configuration.showFestivalColors
+        showMoon: plasmoid.configuration.showMoon
         language: plasmoid.configuration.language
         fontSize: plasmoid.configuration.fontSize
         todayPanchang: root.todayPanchang
         computePanchangForDay: root.computePanchangForDay
-        hasFestivalForDay: root.hasFestivalForDay
+        getPanchangData: root.getPanchangData
         getHolidaysForDate: root.getHolidaysForDate
 
         onResetClicked: root.resetToToday()
@@ -308,6 +313,7 @@ PlasmoidItem {
         onYearMonthChanged: (year, month) => {
             root.currentBsYear = year
             root.currentBsMonth = month
+            root.precomputeMonthPanchang(year, month)
             root.calendarGridData = CalendarUtils.generateCalendarGrid(root.currentBsYear, root.currentBsMonth, 0, plasmoid.configuration.firstDayOfWeek)
         }
     }

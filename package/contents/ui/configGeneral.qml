@@ -125,11 +125,11 @@ Kirigami.FormLayout {
         text: i18n("Show today's tithi in header")
     }
 
-    property alias cfg_showFestivalColors: festivalColorsCheck.checked
+    property alias cfg_showMoon: moonCheck.checked
 
     QQC2.CheckBox {
-        id: festivalColorsCheck
-        text: i18n("Color Hindu festival days")
+        id: moonCheck
+        text: i18n("Show moon phase icon")
     }
 
 }

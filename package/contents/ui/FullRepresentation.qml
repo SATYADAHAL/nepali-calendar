@@ -187,9 +187,17 @@ Item {
                     horizontalAlignment: Text.AlignLeft
                     Layout.fillWidth: true
                 }
+            }
+
+            RowLayout {
+                visible: (fullRep.showPanchang || fullRep.showMoon) && fullRep.todayPanchang !== null
+                spacing: 4
+                Layout.alignment: Qt.AlignVCenter
 
                 Label {
-                    visible: fullRep.showPanchang && fullRep.todayPanchang !== null
+                    visible: fullRep.showPanchang
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.maximumWidth: 90
                     text: {
                         if (!fullRep.todayPanchang) return "";
                         var tithiName;
@@ -209,23 +217,22 @@ Item {
                         return tithiName;
                     }
                     font.family: fullRep.language === "nepali" ? "Noto Sans Devanagari" : Kirigami.Theme.defaultFont.family
-                    font.pointSize: fullRep.getFontSize(9)
+                    font.pointSize: fullRep.getFontSize(11)
                     opacity: 0.65
-                    horizontalAlignment: Text.AlignLeft
-                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignRight
                     elide: Text.ElideRight
                 }
-            }
 
-            MoonPhaseIcon {
-                visible: fullRep.showMoon && fullRep.todayPanchang !== null
-                tithi: fullRep.hoveredTithi > 0 ? fullRep.hoveredTithi
-                    : (fullRep.todayPanchang ? fullRep.todayPanchang.tithi : 0)
-                paksha: fullRep.hoveredPaksha !== "" ? fullRep.hoveredPaksha
-                    : (fullRep.todayPanchang ? fullRep.todayPanchang.paksha : "")
-                Layout.preferredWidth: 32
-                Layout.preferredHeight: 32
-                Layout.alignment: Qt.AlignVCenter
+                MoonPhaseIcon {
+                    visible: fullRep.showMoon
+                    Layout.alignment: Qt.AlignVCenter
+                    tithi: fullRep.hoveredTithi > 0 ? fullRep.hoveredTithi
+                        : (fullRep.todayPanchang ? fullRep.todayPanchang.tithi : 0)
+                    paksha: fullRep.hoveredPaksha !== "" ? fullRep.hoveredPaksha
+                        : (fullRep.todayPanchang ? fullRep.todayPanchang.paksha : "")
+                    Layout.preferredWidth: 26
+                    Layout.preferredHeight: 26
+                }
             }
 
             Item {

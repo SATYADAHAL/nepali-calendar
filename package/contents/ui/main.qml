@@ -13,6 +13,8 @@ import org.kde.plasma.core 2.1 as PlasmaCore
 import "calendarUtils.mjs" as CalendarUtils
 import "./date-map.mjs" as CalendarData
 import "./holidays.mjs" as HolidaysData
+import "./panchang.mjs" as Panchang
+import "./panchang-events.mjs" as PanchangEvents
 import "../icons"
 
 PlasmoidItem {
@@ -57,11 +59,14 @@ PlasmoidItem {
     property var nepaliEnglishDays: reorderDayArray(nepaliEnglishDaysBase, plasmoid.configuration.firstDayOfWeek)
     property string lastAdDate: ""
     property var holidaysData: HolidaysData.ALL_HOLIDAYS
+    property var todayPanchang: null
 
     Plasmoid.title: "Nepali Calendar"
 
     Component.onCompleted: {
         lastAdDate = new Date().toDateString();
+        computeTodayPanchang();
+        precomputeMonthPanchang(currentBsYear, currentBsMonth);
     }
 
     function getHolidaysForDate(year, month, day) {
@@ -157,6 +162,47 @@ PlasmoidItem {
 
     function dateChanged() {
         resetToToday();
+        computeTodayPanchang();
+    }
+
+    function computeTodayPanchang() {
+        todayPanchang = Panchang.calculatePanchang(
+            todayBsInfo.bsYear, todayBsInfo.bsMonth, todayBsInfo.bsDay
+        );
+    }
+
+    function precomputeMonthPanchang(bsYear, bsMonth) {
+        var yearData = CalendarData.DATE_MAP[bsYear];
+        if (!yearData || !yearData.daysonmonth) return;
+        var days = yearData.daysonmonth[bsMonth - 1];
+        if (!days) return;
+        for (var d = 1; d <= days; d++) {
+            Panchang.calculatePanchang(bsYear, bsMonth, d);
+        }
+    }
+
+    function computePanchangForDay(bsYear, bsMonth, bsDay) {
+        var result = Panchang.calculatePanchang(bsYear, bsMonth, bsDay);
+        if (!result) return "";
+        var tithiName;
+        if (plasmoid.configuration.language === "nepali") {
+            if (result.paksha === "Krishna") {
+                tithiName = PanchangEvents.TITHI_NAMES_KRISHNA_NP[result.tithi - 1];
+            } else {
+                tithiName = PanchangEvents.TITHI_NAMES_NP[result.tithi - 1];
+            }
+        } else {
+            if (result.paksha === "Krishna") {
+                tithiName = PanchangEvents.TITHI_NAMES_KRISHNA_EN[result.tithi - 1];
+            } else {
+                tithiName = PanchangEvents.TITHI_NAMES_EN[result.tithi - 1];
+            }
+        }
+        return tithiName;
+    }
+
+    function getPanchangData(bsYear, bsMonth, bsDay) {
+        return Panchang.calculatePanchang(bsYear, bsMonth, bsDay);
     }
 
     function toNepaliNumber(num) {
@@ -183,6 +229,7 @@ PlasmoidItem {
         currentBsYear = prevYear;
         currentBsMonth = prevMonth;
         todayBsDay = 0;
+        precomputeMonthPanchang(currentBsYear, currentBsMonth);
         calendarGridData = CalendarUtils.generateCalendarGrid(currentBsYear, currentBsMonth, todayBsDay, plasmoid.configuration.firstDayOfWeek);
 
         if (prevYear === todayBsInfo.bsYear && prevMonth === todayBsInfo.bsMonth) {
@@ -207,6 +254,7 @@ PlasmoidItem {
         currentBsYear = nextYear;
         currentBsMonth = nextMonth;
         todayBsDay = 0;
+        precomputeMonthPanchang(currentBsYear, currentBsMonth);
         calendarGridData = CalendarUtils.generateCalendarGrid(currentBsYear, currentBsMonth, todayBsDay, plasmoid.configuration.firstDayOfWeek);
 
         if (nextYear === todayBsInfo.bsYear && nextMonth === todayBsInfo.bsMonth) {
@@ -219,6 +267,7 @@ PlasmoidItem {
         currentBsYear = todayBsInfo.bsYear;
         currentBsMonth = todayBsInfo.bsMonth;
         todayBsDay = todayBsInfo.bsDay;
+        precomputeMonthPanchang(currentBsYear, currentBsMonth);
         calendarGridData = CalendarUtils.generateCalendarGrid(currentBsYear, currentBsMonth, todayBsDay, plasmoid.configuration.firstDayOfWeek);
     }
 
@@ -249,8 +298,13 @@ PlasmoidItem {
         showAdDateOnGrid: plasmoid.configuration.showAdDateOnGrid
         showHolidays: plasmoid.configuration.showHolidays
         showWeekendHighlight: plasmoid.configuration.showWeekendHighlight
+        showPanchang: plasmoid.configuration.showPanchang
+        showMoon: plasmoid.configuration.showMoon
         language: plasmoid.configuration.language
         fontSize: plasmoid.configuration.fontSize
+        todayPanchang: root.todayPanchang
+        computePanchangForDay: root.computePanchangForDay
+        getPanchangData: root.getPanchangData
         getHolidaysForDate: root.getHolidaysForDate
 
         onResetClicked: root.resetToToday()
@@ -259,6 +313,7 @@ PlasmoidItem {
         onYearMonthChanged: (year, month) => {
             root.currentBsYear = year
             root.currentBsMonth = month
+            root.precomputeMonthPanchang(year, month)
             root.calendarGridData = CalendarUtils.generateCalendarGrid(root.currentBsYear, root.currentBsMonth, 0, plasmoid.configuration.firstDayOfWeek)
         }
     }

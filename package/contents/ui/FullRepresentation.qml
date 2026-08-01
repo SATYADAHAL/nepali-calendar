@@ -10,6 +10,7 @@ import org.kde.kirigami 2.20 as Kirigami
 
 import "calendarUtils.mjs" as CalendarUtils
 import "./date-map.mjs" as CalendarData
+import "./panchang-events.mjs" as PanchangEvents
 import "../icons"
 
 Item {
@@ -38,6 +39,13 @@ Item {
     property var getHolidaysForDate: function(year, month, day) {
         return [];
     }
+    property var todayPanchang: null
+    property bool showPanchang: false
+    property bool showMoon: true
+    property var computePanchangForDay: function(y, m, d) { return ""; }
+    property var getPanchangData: function(y, m, d) { return null; }
+    property int hoveredTithi: 0
+    property string hoveredPaksha: ""
 
     // Helper function to calculate font size based on base size and fontSize setting
     // fontSize: 0 = Small, 1 = Default, 2 = Large
@@ -160,7 +168,6 @@ Item {
             }
 
             ColumnLayout {
-                Layout.fillWidth: true
                 Layout.alignment: Qt.AlignLeft
                 spacing: -5
                 Label {
@@ -180,6 +187,56 @@ Item {
                     horizontalAlignment: Text.AlignLeft
                     Layout.fillWidth: true
                 }
+            }
+
+            RowLayout {
+                visible: (fullRep.showPanchang || fullRep.showMoon) && fullRep.todayPanchang !== null
+                spacing: 4
+                Layout.alignment: Qt.AlignVCenter
+
+                Label {
+                    visible: fullRep.showPanchang
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.maximumWidth: 90
+                    text: {
+                        if (!fullRep.todayPanchang) return "";
+                        var tithiName;
+                        if (fullRep.language === "nepali") {
+                            if (fullRep.todayPanchang.paksha === "Krishna") {
+                                tithiName = PanchangEvents.TITHI_NAMES_KRISHNA_NP[fullRep.todayPanchang.tithi - 1];
+                            } else {
+                                tithiName = PanchangEvents.TITHI_NAMES_NP[fullRep.todayPanchang.tithi - 1];
+                            }
+                        } else {
+                            if (fullRep.todayPanchang.paksha === "Krishna") {
+                                tithiName = PanchangEvents.TITHI_NAMES_KRISHNA_EN[fullRep.todayPanchang.tithi - 1];
+                            } else {
+                                tithiName = PanchangEvents.TITHI_NAMES_EN[fullRep.todayPanchang.tithi - 1];
+                            }
+                        }
+                        return tithiName;
+                    }
+                    font.family: fullRep.language === "nepali" ? "Noto Sans Devanagari" : Kirigami.Theme.defaultFont.family
+                    font.pointSize: fullRep.getFontSize(11)
+                    opacity: 0.65
+                    horizontalAlignment: Text.AlignRight
+                    elide: Text.ElideRight
+                }
+
+                MoonPhaseIcon {
+                    visible: fullRep.showMoon
+                    Layout.alignment: Qt.AlignVCenter
+                    tithi: fullRep.hoveredTithi > 0 ? fullRep.hoveredTithi
+                        : (fullRep.todayPanchang ? fullRep.todayPanchang.tithi : 0)
+                    paksha: fullRep.hoveredPaksha !== "" ? fullRep.hoveredPaksha
+                        : (fullRep.todayPanchang ? fullRep.todayPanchang.paksha : "")
+                    Layout.preferredWidth: 26
+                    Layout.preferredHeight: 26
+                }
+            }
+
+            Item {
+                Layout.fillWidth: true
             }
 
             Button {
@@ -448,6 +505,7 @@ Item {
                     property var holidays: isCurrentMonth && fullRep.showHolidays ?
                     fullRep.getHolidaysForDate(fullRep.currentBsYear, fullRep.currentBsMonth, nepaliDay) : []
                     property bool hasHoliday: holidays.length > 0
+                    property string hoveredDayPanchangText: ""
 
                     Layout.fillWidth: true
                     Layout.fillHeight: true
@@ -522,35 +580,40 @@ Item {
 
                     ToolTip {
                         id: holidayTooltip
-                        visible: hasHoliday && dayMouseArea.containsMouse
-                        delay: 500
-                        text: {
-                            if (!hasHoliday) return "";
-                            var text = "";
-                            for (var i = 0; i < holidays.length; i++) {
-                                if (i > 0) text += " | ";
+                        visible: (hasHoliday || hoveredDayPanchangText !== "") && dayMouseArea.containsMouse && isCurrentMonth
+                        delay: 300
 
-                                if (fullRep.holidayTitleLanguage === "english") {
-                                    text += holidays[i].title;
-                                } else {
-                                    text += holidays[i].titleDevnagari || holidays[i].title;
+                        contentItem: Column {
+                            spacing: 2
+
+                            Label {
+                                visible: hoveredDayPanchangText !== ""
+                                text: hoveredDayPanchangText
+                                font.pointSize: fullRep.getFontSize(13)
+                                font.family: fullRep.language === "nepali" ? "Noto Sans Devanagari" : Kirigami.Theme.defaultFont.family
+                                color: Kirigami.Theme.textColor
+                            }
+
+                            Repeater {
+                                model: hasHoliday ? holidays : []
+                                Label {
+                                    text: fullRep.language === "nepali"
+                                        ? (modelData.titleDevnagari || modelData.title)
+                                        : modelData.title
+                                    font.pointSize: fullRep.getFontSize(13)
+                                    font.family: fullRep.language === "nepali" ? "Noto Sans Devanagari" : Kirigami.Theme.defaultFont.family
+                                    color: Kirigami.Theme.textColor
                                 }
                             }
-                            return text;
-                        }
-
-                        contentItem: Label {
-                            text: holidayTooltip.text
-                            font.pointSize: fullRep.getFontSize(13)
-                            font.family: fullRep.language === "nepali" ? "Noto Sans Devanagari" : Kirigami.Theme.defaultFont.family
-
-                            color: Kirigami.Theme.textColor
                         }
 
                         background: Rectangle {
                             color: Kirigami.Theme.backgroundColor
                             radius: 6
-                            border.width: 0
+                            border.width: 1
+                            border.color: Qt.rgba(Kirigami.Theme.textColor.r,
+                                                  Kirigami.Theme.textColor.g,
+                                                  Kirigami.Theme.textColor.b, 0.15)
                         }
                     }
 
@@ -559,6 +622,22 @@ Item {
                         anchors.fill: parent
                         hoverEnabled: true
                         propagateComposedEvents: true
+                        onContainsMouseChanged: {
+                            if (containsMouse && isCurrentMonth && nepaliDay > 0) {
+                                hoveredDayPanchangText = fullRep.computePanchangForDay(
+                                    fullRep.currentBsYear, fullRep.currentBsMonth, nepaliDay
+                                );
+                                var data = fullRep.getPanchangData(
+                                    fullRep.currentBsYear, fullRep.currentBsMonth, nepaliDay
+                                );
+                                hoveredTithi = data ? data.tithi : 0;
+                                hoveredPaksha = data ? data.paksha : "";
+                            } else {
+                                hoveredDayPanchangText = "";
+                                hoveredTithi = 0;
+                                hoveredPaksha = "";
+                            }
+                        }
                     }
                 }
             }

@@ -118,4 +118,18 @@ Kirigami.FormLayout {
         text: i18n("Highlight weekends in red")
     }
 
+    property alias cfg_showPanchang: panchangCheck.checked
+
+    QQC2.CheckBox {
+        id: panchangCheck
+        text: i18n("Show today's tithi in header")
+    }
+
+    property alias cfg_showMoon: moonCheck.checked
+
+    QQC2.CheckBox {
+        id: moonCheck
+        text: i18n("Show moon phase icon")
+    }
+
 }

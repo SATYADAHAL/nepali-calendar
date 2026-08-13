@@ -206,7 +206,7 @@ export function getFormattedEnglishDate(date = new Date()) {
 }
 
 export function generateCalendarGrid(bsYear, bsMonth, todayBsDay, firstDayOfWeek = 0) {
-  if (bsYear < 1970 || !DATE_MAP[bsYear]) {
+  if (bsYear < 2000 || !DATE_MAP[bsYear]) {
     const blankDay = {
       bsDay: 0,
       bsMonth: 0,
@@ -246,7 +246,7 @@ export function generateCalendarGrid(bsYear, bsMonth, todayBsDay, firstDayOfWeek
     prevYear--;
   }
 
-  if (prevYear >= 1970 && DATE_MAP[prevYear]) {
+  if (prevYear >= 2000 && DATE_MAP[prevYear]) {
     const prevMonthDays = DATE_MAP[prevYear].daysonmonth[prevMonth - 1];
     const prevMonthStartAdStr = DATE_MAP[prevYear]['1stbaisakh'];
     const prevYearAdStartDate = parseDate(prevMonthStartAdStr);

@@ -65,6 +65,9 @@ Tithis are calculated locally using solar/lunar astronomy (sun & moon longitudes
 
 ### Credits
 
+- Kathmandu Metropolitan City – [Official BS Calendar](https://new.kathmandu.gov.np/en/calendar)  
+  (BS 2000–2099 dataset sourced from the KMC calendar API)  
 - Sushil Shrestha – [pyBSDate](https://github.com/SushilShrestha/pyBSDate)  
-  (Dataset source for BS ⇄ AD mapping)  
-  Licensed under MIT
+  (Original BS ⇄ AD mapping for BS 1970–2100)  
+
+Licensed under GPL-3.0-or-later
